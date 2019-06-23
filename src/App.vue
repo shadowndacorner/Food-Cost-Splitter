@@ -6,9 +6,18 @@
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items class="hidden-sm-and-down">
-				<v-btn flat @click="modalOpen = true">View Saved Orders</v-btn>
-				<v-btn flat @click="loadOrder({people: [],orderInfo: {deliveryTotal: 0,name: ''}})">Clear Order</v-btn>
+				<v-btn v-for="(button, ind) in buttons" :key="ind" flat @click="button.click()">{{button.title}}</v-btn>
 			</v-toolbar-items>
+			<v-menu class="hidden-md-and-up">
+				<v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
+				<v-list>
+					<v-list-tile v-for="(button, ind) in buttons" :key="ind" @click="button.click()">
+						<v-list-tile-content>
+							<v-list-tile-title>{{button.title}}</v-list-tile-title>
+						</v-list-tile-content>
+					</v-list-tile>   
+				</v-list>
+			</v-menu>
 		</v-toolbar>
 
 		<v-content>
@@ -47,7 +56,21 @@ export default {
 	data(){
 		return {
 			modalOpen: false,
-			dataList: []
+			dataList: [],
+			buttons: [
+				{
+					title: "View Saved Orders",
+					click: ()=>{
+						this.modalOpen = true
+					}
+				},
+				{
+					title: "Clear Order",
+					click: ()=>{
+						this.loadOrder({people: [],orderInfo: {deliveryTotal: 0,name: ''}})
+					}
+				},
+			]
 		}
 	},
 	methods: {
